@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="flashGetUserMedia.js"></script>
+</head>
+<body>
+
+<script>
+
+    function onGetMediaSuccess(source) {
+
+        console.log('media success handler', source);
+
+    }
+
+    function onGetMediaFail() {
+
+        console.log('media fail handler');
+
+    }
+
+    flashGetUserMedia.init({swfPath: 'flashGetUserMedia.swf', force: true});
+
+    navigator.getUserMedia({audio: true, video: false}, onGetMediaSuccess, onGetMediaFail);
+
+</script>
+
+</body>
+</html>

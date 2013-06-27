@@ -1,0 +1,22 @@
+{
+    "author": "maciejzasada",
+    "name": "flashGetUserMedia",
+    "version": "0.0.1",
+    "private": true,
+    "engines": {
+        "node": ">= 0.10.4"
+    },
+    "dependencies": {
+        "grunt": "*",
+        "grunt-contrib": "*",
+        "grunt-contrib-clean": "*",
+        "grunt-jslint": "*",
+        "grunt-contrib-concat": "*",
+        "grunt-contrib-copy": "*",
+        "grunt-contrib-uglify": "*",
+        "grunt-contrib-watch": "*"
+    },
+    "devDependencies": {
+        "grunt": "*"
+    }
+}
