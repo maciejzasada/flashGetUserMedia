@@ -63,7 +63,14 @@ package com.maciejzasada.flashgetusermedia.media {
 				
 			}
 			
-			ExternalInterface.call("flashGetUserMedia.onMicrophoneSample", inputBuffer, inputBuffer);
+			inputData = new Vector.<Number>();
+			for (var i : int = 0; i < inputBuffer.length; ++i) {
+				
+				inputData.push(inputBuffer[i]);
+				
+			}
+			
+			ExternalInterface.call("flashGetUserMedia.onMicrophoneSample", inputData, inputData);
 			
 		}
 		
