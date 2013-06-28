@@ -1,4 +1,6 @@
 package com.maciejzasada.flashgetusermedia.api {
+	import com.maciejzasada.flashgetusermedia.api.getusermedia.StopRecordingHandler;
+	import com.maciejzasada.flashgetusermedia.api.getusermedia.SetBufferLengthHandler;
 	import com.maciejzasada.flashgetusermedia.api.getusermedia.GetUserMediaHandler;
 
 	import flash.external.ExternalInterface;
@@ -12,6 +14,8 @@ package com.maciejzasada.flashgetusermedia.api {
 		public function Api() {
 			
 			registerHandler(new GetUserMediaHandler(), "getUserMedia");
+			registerHandler(new SetBufferLengthHandler(), "setBufferLength");
+			registerHandler(new StopRecordingHandler(), "stopRecording");
 			
 		}
 		

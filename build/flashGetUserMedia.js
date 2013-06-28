@@ -786,7 +786,7 @@ var swfobject = function() {
 (function (window, document, navigator) {
 
     'use strict';
-    var flashGetUserMediaObject, flashGetUserMedia, flashAudioContext, Utils;
+    var flashGetUserMediaObject, flashGetUserMedia, flashAudioContext, MediaStreamSource, JavaScriptNode, Utils;
 
     Utils = {
 
@@ -796,6 +796,7 @@ var swfobject = function() {
         successHandler: null,
         failureHandler: null,
         lastOptions: null,
+        mediaStreamSource: null,
 
         options: {
 
@@ -845,6 +846,92 @@ var swfobject = function() {
 
     };
 
+    /**
+     * JavaScriptNode
+     * @constructor
+     */
+    JavaScriptNode = function (bufferLength, numInputs, numOutputs) {
+
+        this.bufferLength = bufferLength;
+        this.numInputs = numInputs;
+        this.numOutputs = numOutputs;
+        this.onaudioprocess = null;
+        console.log('JavaScriptNode', bufferLength, numInputs, numOutputs);
+
+    };
+
+    JavaScriptNode.prototype = {
+
+        connect: function (destination) {
+
+            console.log('connecting destination', destination);
+
+        }
+
+    };
+
+    /**
+     * MediaStreamSource
+     * @constructor
+     */
+    MediaStreamSource = function (context, source) {
+
+        this.context = context;
+        this.source = source;
+        this.node = null;
+
+        Utils.mediaStreamSource = this;
+
+    };
+
+    MediaStreamSource.prototype = {
+
+        connect: function (node) {
+
+            console.log('connecting node to source', node);
+            this.node = node;
+
+        }
+
+    };
+
+    /**
+     * flashAudioContext
+     * @constructor
+     */
+    flashAudioContext = function () {
+
+        console.log('audio context');
+        this.sampleRate = -1;
+
+    };
+
+    flashAudioContext.prototype = {
+
+        createMediaStreamSource: function (mediaStreamSource) {
+
+            console.log('createMediaStreamSource', mediaStreamSource);
+            this.sampleRate = mediaStreamSource.microphone ? mediaStreamSource.microphone.rate * 1000 : -1;
+            return new MediaStreamSource(this, mediaStreamSource);
+
+        },
+
+        createJavaScriptNode: function (bufferLength, numInputs, numOutputs) {
+
+            console.log('creating JS node', bufferLength, numInputs, numOutputs);
+            Utils.flash.setBufferLength(bufferLength);
+            return new JavaScriptNode(bufferLength, numInputs, numOutputs);
+
+        }
+
+    };
+
+    /**
+     * flashGetUserMedia
+     * @param options
+     * @param successHandler
+     * @param failureHandler
+     */
     flashGetUserMedia = function (options, successHandler, failureHandler) {
 
         if (flashGetUserMediaObject.ready) {
@@ -863,12 +950,9 @@ var swfobject = function() {
 
     };
 
-    flashAudioContext = function () {
-
-        console.log('audio context');
-
-    };
-
+    /**
+     * flashGetUserMediaObject
+     */
     flashGetUserMediaObject = {
 
         ready: false,
@@ -890,6 +974,7 @@ var swfobject = function() {
             if (Utils.options.force) {
 
                 navigator.getUserMedia = flashGetUserMedia;
+                window.AudioContext = flashAudioContext;
 
             }
 
@@ -898,6 +983,12 @@ var swfobject = function() {
                 Utils.loadFlash(Utils.options.swfPath);
 
             }
+
+        },
+
+        stopRecording: function () {
+
+            Utils.flash.stopRecording();
 
         },
 
@@ -912,20 +1003,18 @@ var swfobject = function() {
         maximize: function () {
 
             Utils.flash.width = 215;
-            Utils.flash.height = 137;
+            Utils.flash.height = 138;
 
         },
 
         minimize: function () {
 
-            Utils.flash.width = 0;
-            Utils.flash.height = 0;
+            Utils.flash.width = 1;
+            Utils.flash.height = 1;
 
         },
 
         onMediaStatus: function (camera, microphone, stream) {
-
-            console.log('media status', camera, microphone);
 
             if ((!Utils.lastOptions.audio || microphone) && (!Utils.lastOptions.video || camera)) {
 
@@ -945,12 +1034,31 @@ var swfobject = function() {
 
             }
 
+        },
+
+        onMicrophoneSample: function (leftChannel, rightChannel) {
+
+            if (Utils.mediaStreamSource && Utils.mediaStreamSource.node && typeof Utils.mediaStreamSource.node.onaudioprocess === 'function') {
+
+                Utils.mediaStreamSource.node.onaudioprocess({inputBuffer: {
+
+                    getChannelData: function (channel) {
+
+                        return channel === 0 ? leftChannel : rightChannel;
+
+                    }
+
+                }});
+
+            }
+
         }
 
     };
 
     navigator.flashGetUserMedia = flashGetUserMedia;
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.flashGetUserMedia;
+    window.AudioContext = window.AudioContext || window.webkitAudioContext || flashAudioContext;
 
     window.flashGetUserMedia = flashGetUserMediaObject;
 

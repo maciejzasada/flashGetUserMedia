@@ -1,4 +1,5 @@
 package com.maciejzasada.flashgetusermedia.api.getusermedia {
+	import com.maciejzasada.flashgetusermedia.media.MicrophoneMedia;
 	import com.maciejzasada.flashgetusermedia.media.LocalMediaStream;
 	import com.maciejzasada.flashgetusermedia.utils.JsUtils;
 	import com.maciejzasada.flashgetusermedia.utils.StageUtils;
@@ -16,10 +17,20 @@ package com.maciejzasada.flashgetusermedia.api.getusermedia {
 	 */
 	public class GetUserMediaHandler {
 		
+		private static var instance : GetUserMediaHandler;
+		
 		private var camera : Camera;
-		private var microphone: Microphone;
+		private var microphoneMedia : MicrophoneMedia;
+		
+		public static function getInstance() : GetUserMediaHandler {
+			
+			return instance;
+			
+		}
 		
 		public function GetUserMediaHandler() {
+			
+			instance = this;
 			
 		}
 		
@@ -33,6 +44,18 @@ package com.maciejzasada.flashgetusermedia.api.getusermedia {
 					startAudio();
 				}
 			}
+			
+		}
+		
+		public function setBufferLength(length : int) : void {
+			
+			microphoneMedia.setBufferLength(length);
+			
+		}
+		
+		public function stopRecording() : void {
+			
+			microphoneMedia.stopProcessing();
 			
 		}
 		
@@ -56,12 +79,14 @@ package com.maciejzasada.flashgetusermedia.api.getusermedia {
 		
 		private function startAudio() : void {
 			
-			microphone = Microphone.getMicrophone();
+			JsUtils.maximize();
+			
+			var microphone : Microphone = Microphone.getEnhancedMicrophone(0);
+			microphoneMedia = new MicrophoneMedia(microphone);
 			
 			if (microphone.muted) {
 				
-				JsUtils.maximize();
-				Security.showSettings(SecurityPanel.PRIVACY);
+				Security.showSettings("2");
 				StageUtils.stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 
 			} else {
@@ -77,9 +102,12 @@ package com.maciejzasada.flashgetusermedia.api.getusermedia {
 			var dummy : BitmapData = new BitmapData(1, 1);
 			
 			try {
+				
     			dummy.draw(StageUtils.stage);
 				StageUtils.stage.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+				microphoneMedia.startProcessing();
 				onSecurityPanelClose();
+				
 			} catch (error:Error) {
 				
 			}
@@ -88,13 +116,14 @@ package com.maciejzasada.flashgetusermedia.api.getusermedia {
 		
 		private function onSecurityPanelClose() : void {
 			
-			onMediaStatus(camera && !camera.muted ? true : false, microphone && !microphone.muted ? true : false);
+			JsUtils.minimize();
+			onMediaStatus(camera && !camera.muted ? true : false, microphoneMedia && !microphoneMedia.microphone.muted ? true : false);
 			
 		}
 		
 		private function onMediaStatus(cameraAllowed: Boolean, microphoneAllowed: Boolean) : void {
 			
-			ExternalInterface.call("flashGetUserMedia.onMediaStatus", cameraAllowed, microphoneAllowed, new LocalMediaStream(cameraAllowed ? camera : null, microphoneAllowed ? microphone : null));
+			ExternalInterface.call("flashGetUserMedia.onMediaStatus", cameraAllowed, microphoneAllowed, new LocalMediaStream(cameraAllowed ? camera : null, microphoneAllowed ? microphoneMedia : null));
 			
 		}
 		

@@ -1,6 +1,6 @@
 package com.maciejzasada.flashgetusermedia.media {
+	import flash.media.SoundTransform;
 	import flash.media.Camera;
-	import flash.media.Microphone;
 	import flash.utils.Dictionary;
 	/**
 	 * @author magic
@@ -12,7 +12,7 @@ package com.maciejzasada.flashgetusermedia.media {
 		
 		public var id : String;
 		public var camera : Camera;
-		public var microphone : Microphone;
+		public var microphone : MicrophoneMedia;
 		
 		public static function getById(id : String) : LocalMediaStream {
 			
@@ -20,12 +20,24 @@ package com.maciejzasada.flashgetusermedia.media {
 			
 		}
 		
-		function LocalMediaStream(camera : Camera, microphone: Microphone) {
+		function LocalMediaStream(camera : Camera, microphone: MicrophoneMedia) {
 			
 			this.id = "s" + (idSeed++).toString();
 			this.camera = camera;
 			this.microphone = microphone;
 			streamsById[this.id] = this;
+			
+			if (microphone.microphone) {
+				
+				microphone.microphone.setLoopBack(true);
+				microphone.microphone.setSilenceLevel(0, -1);
+				microphone.microphone.setUseEchoSuppression(true);
+				microphone.microphone.rate = 44;
+				microphone.microphone.enableVAD = true;
+				microphone.microphone.encodeQuality = 10;
+				microphone.microphone.soundTransform = new SoundTransform(0);
+				
+			}
 			
 		}
 		

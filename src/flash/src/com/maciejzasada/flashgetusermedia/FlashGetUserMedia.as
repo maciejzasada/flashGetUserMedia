@@ -1,4 +1,5 @@
 package com.maciejzasada.flashgetusermedia {
+	import com.maciejzasada.flashgetusermedia.config.Config;
 	import com.maciejzasada.flashgetusermedia.utils.StageUtils;
 	import flash.external.ExternalInterface;
 	import flash.display.LoaderInfo;
@@ -11,7 +12,7 @@ package com.maciejzasada.flashgetusermedia {
 		
 		public function FlashGetUserMedia() {
 			
-			trace("flashGetUserMedia v. 0.1");
+			trace("flashGetUserMedia v. " + Config.version);
 			
 			StageUtils.init(stage);
 			
