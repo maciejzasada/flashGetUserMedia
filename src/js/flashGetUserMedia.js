@@ -28,8 +28,6 @@
 
         loadFlash: function (url) {
 
-            console.log('loading Flash from', url);
-
             var container = document.createElement('div'),
                 flashvars = {
                     initHandler: 'flashGetUserMedia.pluginReady'
@@ -78,16 +76,12 @@
         this.numInputs = numInputs;
         this.numOutputs = numOutputs;
         this.onaudioprocess = null;
-        console.log('JavaScriptNode', bufferLength, numInputs, numOutputs);
 
     };
 
     JavaScriptNode.prototype = {
 
         connect: function (destination) {
-
-            console.log('connecting destination', destination);
-
         }
 
     };
@@ -110,7 +104,6 @@
 
         connect: function (node) {
 
-            console.log('connecting node to source', node);
             this.node = node;
 
         }
@@ -123,7 +116,6 @@
      */
     flashAudioContext = function () {
 
-        console.log('audio context');
         this.sampleRate = -1;
 
     };
@@ -132,7 +124,6 @@
 
         createMediaStreamSource: function (mediaStreamSource) {
 
-            console.log('createMediaStreamSource', mediaStreamSource);
             this.sampleRate = mediaStreamSource.microphone ? mediaStreamSource.microphone.rate * 1000 : -1;
             return new MediaStreamSource(this, mediaStreamSource);
 
@@ -140,7 +131,6 @@
 
         createJavaScriptNode: function (bufferLength, numInputs, numOutputs) {
 
-            console.log('creating JS node', bufferLength, numInputs, numOutputs);
             Utils.flash.setBufferLength(bufferLength);
             return new JavaScriptNode(bufferLength, numInputs, numOutputs);
 
@@ -158,7 +148,6 @@
 
         if (flashGetUserMediaObject.ready) {
 
-            console.log('executing getUserMedia', options);
             Utils.successHandler = successHandler;
             Utils.failureHandler = failureHandler;
             Utils.lastOptions = options;

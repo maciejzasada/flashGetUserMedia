@@ -13,7 +13,6 @@
 
     function onGetMediaSuccess(source) {
 
-        console.log('media success handler', source.microphone);
         mediaStreamSource = audioContext.createMediaStreamSource(source);
         setTimeout(function () {
             record();
@@ -30,9 +29,7 @@
     function record() {
 
         recorder = new Recorder(mediaStreamSource);
-        console.log('recorder', recorder);
         recorder.record();
-        console.log('recording');
 
     }
 

@@ -8,7 +8,6 @@
         this.context = source.context;
         this.node = this.context.createJavaScriptNode(bufferLen, 2, 2);
         var worker = new Worker(config.workerPath || WORKER_PATH);
-        console.log(this.context.sampleRate);
         worker.postMessage({
             command: 'init',
             config: {
@@ -38,12 +37,10 @@
         }
 
         this.record = function () {
-            console.log('record');
             recording = true;
         }
 
         this.stop = function () {
-            console.log('stop');
             recording = false;
         }
 

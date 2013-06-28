@@ -58,19 +58,19 @@ package com.maciejzasada.flashgetusermedia.media {
 			
 			while (event.data.bytesAvailable > 0 && currentIndex ++ < bufferLength) {
 				
-				sample = event.data.readFloat();
+				sample = Number(event.data.readFloat());
 				inputBuffer.push(sample * 0.8);
 				
 			}
 			
-			inputData = new Vector.<Number>();
-			for (var i : int = 0; i < inputBuffer.length; ++i) {
+			//inputData = new Vector.<Number>();
+			//for (var i : int = 0; i < inputBuffer.length; ++i) {
 				
-				inputData.push(inputBuffer[i]);
+				//inputData.push(inputBuffer[i]);
 				
-			}
+			//}
 			
-			ExternalInterface.call("flashGetUserMedia.onMicrophoneSample", inputData, inputData);
+			ExternalInterface.call("flashGetUserMedia.onMicrophoneSample", inputBuffer, inputBuffer);
 			
 		}
 		
