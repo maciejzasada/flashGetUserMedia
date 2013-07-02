@@ -19,9 +19,11 @@ package com.maciejzasada.flashgetusermedia.media {
 			
 			this.microphone = microphone;
 			if(microphone) {
+				this.microphone.rate = 44;
 				microphone.addEventListener(SampleDataEvent.SAMPLE_DATA, onSampleData);
 			}
 			
+			ExternalInterface.call("console.log", "mic rate: " + microphone.rate.toString());
 		}
 		
 		public function get rate() : int {
@@ -63,14 +65,16 @@ package com.maciejzasada.flashgetusermedia.media {
 				
 			}
 			
-			//inputData = new Vector.<Number>();
-			//for (var i : int = 0; i < inputBuffer.length; ++i) {
-				
-				//inputData.push(inputBuffer[i]);
-				
-			//}
+			var increment : Number = 44.0 / microphone.rate;
 			
-			ExternalInterface.call("flashGetUserMedia.onMicrophoneSample", inputBuffer, inputBuffer);
+			inputData = new Vector.<Number>();
+			for (var i : Number = 0; i < inputBuffer.length; i += increment) {
+				
+				inputData.push(inputBuffer[Math.round(i)]);
+				
+			}
+			
+			ExternalInterface.call("flashGetUserMedia.onMicrophoneSample", inputData, inputData);
 			
 		}
 		

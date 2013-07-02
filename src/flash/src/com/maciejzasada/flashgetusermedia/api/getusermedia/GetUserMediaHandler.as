@@ -81,7 +81,7 @@ package com.maciejzasada.flashgetusermedia.api.getusermedia {
 			
 			JsUtils.maximize();
 			
-			var microphone : Microphone = Microphone.getEnhancedMicrophone(0);
+			var microphone : Microphone = Microphone.getMicrophone();
 			microphoneMedia = new MicrophoneMedia(microphone);
 			
 			if (microphone.muted) {
