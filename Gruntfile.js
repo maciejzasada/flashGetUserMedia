@@ -71,7 +71,7 @@ module.exports = function (grunt) {
             js: {
 
                 files: ['src/js/flashGetUserMedia.js'],
-                tasks: ['jslint', 'concat']
+                tasks: ['jslint', 'concat', 'uglify']
 
             }
 
