@@ -790,7 +790,7 @@ var swfobject = function() {
 
     Utils = {
 
-        id: 'flashGetUserMedia',
+        id: 'flashGetUserMediaDiv',
         flash: null,
         delayedCalls: [],
         successHandler: null,
@@ -806,8 +806,7 @@ var swfobject = function() {
 
         loadFlash: function (url) {
 
-            // var container = document.createElement('div'),
-            var container = document.getElementById('flashGetUserMediaDiv'),
+            var container = document.createElement('div'),
                 flashvars = {
                     initHandler: 'flashGetUserMedia.pluginReady'
                 },
@@ -819,7 +818,7 @@ var swfobject = function() {
                 attributes = {};
 
             container.id = Utils.id;
-            // document.body.appendChild(container);
+            document.body.appendChild(container);
             swfobject.embedSWF(url, Utils.id, '215', '138', '11.1.0', 'expressInstall.swf', flashvars, params, attributes);
 
         },
@@ -993,18 +992,18 @@ var swfobject = function() {
 
         maximize: function () {
 
-            document.getElementById(Utils.id).style.display = 'block';
-            // Utils.flash.width = 215;
-            // Utils.flash.height = 138;
+            // Utils.flash.style.display = 'block';
+            Utils.flash.width = 215;
+            Utils.flash.height = 138;
 
         },
 
         minimize: function () {
 
-            document.getElementById(Utils.id).style.display = 'none';
+            // document.getElementById(Utils.id).style.display = 'none';
 
-            // Utils.flash.width = 1;
-            // Utils.flash.height = 1;
+            Utils.flash.width = 1;
+            Utils.flash.height = 1;
 
         },
 
