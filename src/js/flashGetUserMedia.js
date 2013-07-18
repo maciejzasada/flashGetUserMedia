@@ -215,7 +215,7 @@
 
         maximize: function () {
 
-            document.getElementById(Utils.id).display = 'block';
+            document.getElementById(Utils.id).style.display = 'block';
             // Utils.flash.width = 215;
             // Utils.flash.height = 138;
 
@@ -223,7 +223,7 @@
 
         minimize: function () {
 
-            document.getElementById(Utils.id).display = 'none';
+            document.getElementById(Utils.id).style.display = 'none';
 
             // Utils.flash.width = 1;
             // Utils.flash.height = 1;
