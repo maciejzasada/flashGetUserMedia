@@ -820,7 +820,7 @@ var swfobject = function() {
 
             container.id = Utils.id;
             // document.body.appendChild(container);
-            swfobject.embedSWF(url, Utils.id, '600', '600', '11.1.0', 'expressInstall.swf', flashvars, params, attributes);
+            swfobject.embedSWF(url, Utils.id, '215', '138', '11.1.0', 'expressInstall.swf', flashvars, params, attributes);
 
         },
 
@@ -993,12 +993,15 @@ var swfobject = function() {
 
         maximize: function () {
 
+            document.getElementById(Utils.id).display = 'block';
             // Utils.flash.width = 215;
             // Utils.flash.height = 138;
 
         },
 
         minimize: function () {
+
+            document.getElementById(Utils.id).display = 'none';
 
             // Utils.flash.width = 1;
             // Utils.flash.height = 1;
