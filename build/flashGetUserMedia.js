@@ -807,7 +807,7 @@ var swfobject = function() {
         loadFlash: function (url) {
 
             // var container = document.createElement('div'),
-            var container = document.getElementById('flashGetUserMedia'),
+            var container = document.getElementById('flashGetUserMediaDiv'),
                 flashvars = {
                     initHandler: 'flashGetUserMedia.pluginReady'
                 },
